@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Client Details</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em; background-color: #f4f4f4; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 2em; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #3f51b5; text-align: center; }
+        .client-info p { margin: 0.5em 0; }
+        .client-info label { font-weight: bold; color: #555; }
+        .back-link { display: block; margin-top: 2em; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>{{ client.company_name }}</h1>
+        <div class="client-info">
+            <p><label>Contact Person:</label> {{ client.contact_person }}</p>
+            <p><label>Country:</label> {{ client.country }}</p>
+            <p><label>System User:</label> {{ client.system_user }}</p>
+            <p><label>Status:</label> {{ client.status }}</p>
+            {% if client.status == 'On Hold' %}
+                <p><label>Reason for Roadblock:</label> {{ client.reason_for_roadblock }}</p>
+            {% endif %}
+            <p><label>Offered Product:</label> {{ client.get_offered_product_display }}</p>
+            <p><label>Potential Market Share:</label> {{ client.potential_market_share }}%</p>
+            <p><label>Potential Yearly Sales:</label> €{{ client.potential_yearly_sales }}</p>
+            <p><label>Last Action:</label> {{ client.last_action }}</p>
+            <p><label>Next Action:</label> {{ client.next_action }}</p>
+            <p><label>Comment/Feedback:</label> {{ client.comment_feedback }}</p>
+        </div>
+        <a class="back-link" href="{% url 'client_list' %}">Back to Client List</a>
+    </div>
+
+</body>
+</html>

@@ -33,7 +33,7 @@
                 <td>{{ client.contact_person }}</td>
                 <td>{{ client.country }}</td>
                 <td>{{ client.status }}</td>
-                <td><a href="#">Details</a></td>
+                <td><a href="{% url 'client_detail' client.pk %}">Details</a></td>
             </tr>
             {% endfor %}
         </tbody>
