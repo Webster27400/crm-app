@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em; background-color: #f4f4f4; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 2em; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #3f51b5; text-align: center; }
+        .chart-container { position: relative; height: 400px; width: 400px; margin: auto; }
+        .back-link { display: block; text-align: center; margin-top: 2em; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Clients Status Dashboard</h1>
+
+        <p>Filter by:</p>
+        <select id="filterSelect" onchange="window.location.href = '?filter=' + this.value;">
+            <option value="status" {% if filter_by == 'status' %}selected{% endif %}>Status</option>
+            <option value="country" {% if filter_by == 'country' %}selected{% endif %}>Country</option>
+            <option value="offered_product" {% if filter_by == 'offered_product' %}selected{% endif %}>Offered Product</option>
+            <option value="potential_market_share" {% if filter_by == 'potential_market_share' %}selected{% endif %}>Potential Market Share</option>
+        </select>
+
+        <div class="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+
+        <a class="back-link" href="{% url 'client_list' %}">Back to Client List</a>
+    </div>
+
+    <script>
+        const counts = {{ counts|safe }};
+        const labels = Object.keys(counts);
+        const data = Object.values(counts);
+
+        const ctx = document.getElementById('myChart');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Number of Clients',
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)',
+                        'rgba(255, 159, 64, 0.7)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Client Data Distribution'
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

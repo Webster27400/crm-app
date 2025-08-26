@@ -57,3 +57,29 @@ def client_delete(request, pk):
         'client': client
     }
     return render(request, 'clients/client_confirm_delete.html', context)
+
+def dashboard(request):
+    filter_by = request.GET.get('filter', 'status')
+    valid_filters = ['status', 'country', 'offered_product', 'potential_market_share']
+
+    if filter_by not in valid_filters:
+        filter_by = 'status'
+
+    counts = {}
+    for item in Client.objects.all():
+        value = getattr(item, filter_by)
+
+        if filter_by == 'offered_product':
+            # Pobieramy pełną nazwę produktu
+            value = item.get_offered_product_display()
+        elif filter_by == 'potential_market_share':
+            # Dodajemy znak % do wartości
+            value = f"{value}%"
+
+        counts[value] = counts.get(value, 0) + 1
+
+    context = {
+        'counts': counts,
+        'filter_by': filter_by
+    }
+    return render(request, 'clients/dashboard.html', context)
