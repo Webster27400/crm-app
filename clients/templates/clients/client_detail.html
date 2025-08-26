@@ -31,6 +31,8 @@
             <p><label>Next Action:</label> {{ client.next_action }}</p>
             <p><label>Comment/Feedback:</label> {{ client.comment_feedback }}</p>
         </div>
+        <a href="{% url 'client_update' client.pk %}">Edit</a>
+        <a href="{% url 'client_delete' client.pk %}">Delete</a>
         <a class="back-link" href="{% url 'client_list' %}">Back to Client List</a>
     </div>
 
