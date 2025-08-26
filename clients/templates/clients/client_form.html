@@ -30,5 +30,26 @@
         </form>
     </div>
 
+    <script>
+        // Get the select element for 'status' and its corresponding form field for 'reason_for_roadblock'
+        const statusSelect = document.querySelector('select[name="status"]');
+        const roadblockField = document.getElementById('id_reason_for_roadblock').parentElement;
+
+        // Function to toggle the visibility of the roadblock field
+        function toggleRoadblockField() {
+            if (statusSelect.value === 'On Hold') {
+                roadblockField.style.display = 'block';
+            } else {
+                roadblockField.style.display = 'none';
+            }
+        }
+
+        // Call the function on page load to set the initial state
+        toggleRoadblockField();
+
+        // Add an event listener to the status select field
+        statusSelect.addEventListener('change', toggleRoadblockField);
+    </script>
+
 </body>
 </html>
