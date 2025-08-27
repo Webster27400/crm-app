@@ -65,6 +65,13 @@ def dashboard(request):
     if filter_by not in valid_filters:
         filter_by = 'status'
 
+    filter_names = {
+        'status': 'Status',
+        'country': 'Country',
+        'offered_product': 'Offered Product',
+        'potential_market_share': 'Potential Market Share'
+    }
+
     counts = {}
     for item in Client.objects.all():
         value = getattr(item, filter_by)
@@ -80,6 +87,7 @@ def dashboard(request):
 
     context = {
         'counts': counts,
-        'filter_by': filter_by
+        'filter_by': filter_by,
+        'filter_name': filter_names.get(filter_by, 'Status')
     }
     return render(request, 'clients/dashboard.html', context)

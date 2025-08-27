@@ -10,6 +10,7 @@
         .chart-container { position: relative; height: 400px; width: 400px; margin: auto; }
         .back-link { display: block; text-align: center; margin-top: 2em; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -27,6 +28,15 @@
 
         <div class="chart-container">
             <canvas id="myChart"></canvas>
+        </div>
+
+        <div class="report-summary">
+            <h2>Report Summary - {{ filter_name }}</h2>
+            <ul>
+                {% for key, value in counts.items %}
+                    <li><b>{{ key }}</b>: {{ value }} clients</li>
+                {% endfor %}
+            </ul>
         </div>
 
         <a class="back-link" href="{% url 'client_list' %}">Back to Client List</a>
@@ -65,6 +75,21 @@
                     title: {
                         display: true,
                         text: 'Client Data Distribution'
+                    },
+                    datalabels: { // Opcje dla wtyczki
+                        formatter: (value, ctx) => {
+                            let sum = 0;
+                            let dataArr = ctx.chart.data.datasets[0].data;
+                            dataArr.map(data => {
+                                sum += data;
+                            });
+                            let percentage = (value*100 / sum).toFixed(2)+"%";
+                            return percentage;
+                        },
+                        color: '#fff',
+                        font: {
+                            weight: 'bold'
+                        }
                     }
                 }
             }
