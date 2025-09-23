@@ -2,6 +2,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Client
 from .forms import ClientForm
+from .forms import ClientForm, TaskForm
 
 def client_list(request):
     clients = Client.objects.all()
@@ -12,8 +13,23 @@ def client_list(request):
 
 def client_detail(request, pk):
     client = get_object_or_404(Client, pk=pk)
+
+    if request.method == 'POST':
+        task_form = TaskForm(request.POST)
+        if task_form.is_valid():
+            new_task = task_form.save(commit=False)
+            new_task.client = client
+            new_task.save()
+            return redirect('client_detail', pk=client.pk)
+    else:
+        task_form = TaskForm()
+
+    tasks = client.tasks.all().order_by('due_date')
+
     context = {
-        'client': client
+        'client': client,
+        'task_form': task_form,
+        'tasks': tasks
     }
     return render(request, 'clients/client_detail.html', context)
 

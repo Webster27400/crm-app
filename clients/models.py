@@ -50,3 +50,22 @@ class Client(models.Model):
 
     def __str__(self):
         return self.company_name
+    
+class Task(models.Model):
+    STATUS_CHOICES = [
+        ('To Do', 'To Do'),
+        ('In Progress', 'In Progress'),
+        ('Done', 'Done'),
+    ]
+
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='tasks')
+    action = models.TextField()
+    assigned_to = models.CharField(max_length=100)
+    due_date = models.DateField()
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='To Do')
+    completed_date = models.DateField(null=True, blank=True)
+    is_archived = models.BooleanField(default=False)
+    comment = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Task for {self.client.company_name}: {self.action[:30]}..."

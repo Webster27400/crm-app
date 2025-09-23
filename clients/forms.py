@@ -1,6 +1,6 @@
 # clients/forms.py
 from django import forms
-from .models import Client
+from .models import Client, Task
 
 class ClientForm(forms.ModelForm):
     class Meta:
@@ -18,3 +18,18 @@ class ClientForm(forms.ModelForm):
             )
         
         return cleaned_data
+    
+class ClientForm(forms.ModelForm):
+    class Meta:
+        model = Client
+        fields = '__all__'
+
+class TaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ['action', 'assigned_to', 'due_date', 'status', 'comment']
+        widgets = {
+            'due_date': forms.DateInput(attrs={'type': 'date'}),
+            'action': forms.Textarea(attrs={'rows': 3}),
+            'comment': forms.Textarea(attrs={'rows': 3}),
+        }
