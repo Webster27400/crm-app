@@ -130,8 +130,12 @@
                         <td>{{ task.status }}</td>
                         <td>{{ task.comment }}</td>
                         <td>
-                            <a href="#">Edit</a> | 
-                            <a href="#">Archive</a>
+                            <a href="{% url 'task_update' pk=task.pk %}">Edit</a> |
+                            {% if task.is_archived %}
+                                <a href="{% url 'task_delete' pk=task.pk %}" onclick="return confirm('Are you sure?');">Delete</a>
+                            {% else %}
+                                <a href="{% url 'task_archive' pk=task.pk %}">Archive</a>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}

@@ -1,6 +1,6 @@
 # clients/views.py
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Client
+from .models import Client, Task
 from .forms import ClientForm
 from .forms import ClientForm, TaskForm
 
@@ -152,3 +152,31 @@ def dashboard(request):
         'filter_name': filter_names.get(filter_by, 'Status') # Make sure this line is here
     }
     return render(request, 'clients/dashboard.html', context)
+
+def task_update(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    if request.method == 'POST':
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            return redirect('client_detail', pk=task.client.pk)
+    else:
+        form = TaskForm(instance=task)
+
+    context = {
+        'form': form,
+        'task': task  # Upewnij się, że ta linia jest obecna
+    }
+    return render(request, 'clients/task_form.html', context)
+
+def task_archive(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.is_archived = True
+    task.save()
+    return redirect('client_detail', pk=task.client.pk)
+
+def task_delete(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    client_pk = task.client.pk
+    task.delete()
+    return redirect('client_detail', pk=client_pk)
